@@ -1,0 +1,29 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Raw TNG HDF5 files are too large for GitHub (up to 5.48 GB).
+# Processed CSVs and outputs ARE committed so readers see results without re-running the pipeline.
+data/*.hdf5
+data/*.h5
+*.png.backup
+
+# Virtualenvs
+.venv/
+venv/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Secrets
+.env
+.env.*
+!.env.example

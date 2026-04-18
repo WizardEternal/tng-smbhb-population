@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "tng-smbhb-population: IllustrisTNG SMBHB merger catalog → multi-messenger gap plot"
+authors:
+  - family-names: Karan
+version: 0.1.0
+date-released: 2026-04-17
+license: MIT
+repository-code: "https://github.com/WizardEternal/tng-smbhb-population"
+
+references:
+  - type: article
+    authors:
+      - family-names: Nelson
+        given-names: Dylan
+      - family-names: Springel
+        given-names: Volker
+      - family-names: Pillepich
+        given-names: Annalisa
+      - name: "et al."
+    title: "The IllustrisTNG simulations: public data release"
+    journal: "Computational Astrophysics and Cosmology"
+    volume: 6
+    issue: 2
+    year: 2019
+    doi: "10.1186/s40668-019-0028-x"
+
+  - type: article
+    authors:
+      - family-names: Lin
+        given-names: Yan-Fei
+      - family-names: Charisi
+        given-names: Maria
+      - family-names: Haiman
+        given-names: Zoltan
+    title: "Recovering periodic signals from supermassive black hole binary candidates with the Lomb-Scargle periodogram"
+    journal: "The Astrophysical Journal"
+    volume: 997
+    issue: 316
+    year: 2026
+    doi: "10.3847/1538-4357/ae29a7"

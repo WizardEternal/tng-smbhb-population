@@ -1,0 +1,11 @@
+name: tng-smbhb-population
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy>=1.26,<3
+  - scipy>=1.11,<2
+  - matplotlib>=3.8,<4
+  - astropy>=6.0,<8
+  - h5py>=3.10,<4

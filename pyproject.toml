@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tng-smbhb-population"
+version = "0.1.0"
+description = "IllustrisTNG SMBHB merger catalog → multi-messenger gap plot"
+authors = [{ name = "Karan" }]
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26,<3",
+    "scipy>=1.11,<2",
+    "matplotlib>=3.8,<4",
+    "astropy>=6.0,<8",
+    "h5py>=3.10,<4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+    "hypothesis>=6.100,<7",
+    "mypy>=1.10,<2",
+    "ruff>=0.5,<1",
+    "black",
+    "pre-commit",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+strict = true
+packages = ["tng_smbhb"]
+
+[tool.ruff]
+line-length = 99
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "ANN", "B", "SIM"]
+
+[tool.black]
+line-length = 99
