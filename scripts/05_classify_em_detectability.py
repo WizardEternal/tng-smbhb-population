@@ -126,10 +126,14 @@ def main() -> int:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     print(f"\nWriting CSV to {output_path} ...")
 
+    # `band` is assigned from f_isco_observer_hz = f_isco_source_hz / (1+z);
+    # the legacy `f_isco_hz` alias is source-frame.  Both are written so a
+    # CSV reader can reproduce the band label exactly.
     header = (
         "m1_msun,m2_msun,scale_factor,redshift,chirp_mass_msun,"
         "total_mass_msun,mass_ratio_q,eta,passes_quality_cut,"
-        "f_isco_hz,band,in_pta,in_lisa,in_gap,"
+        "f_isco_hz,f_isco_source_hz,f_isco_observer_hz,"
+        "band,in_pta,in_lisa,in_gap,"
         "p_orb_isco_rest_days,p_orb_isco_obs_days,"
         "in_stripe82,in_ptf,in_lsst,"
         "expected_sin_stripe82,expected_saw_stripe82,"
@@ -149,6 +153,8 @@ def main() -> int:
                 f"{pop.eta[i]:.8f}",
                 f"{int(pop.passes_quality_cut[i])}",
                 f"{gwc.f_isco_hz[i]:.6e}",
+                f"{gwc.f_isco_source_hz[i]:.6e}",
+                f"{gwc.f_isco_observer_hz[i]:.6e}",
                 str(gwc.band[i]),
                 f"{int(gwc.in_pta[i])}",
                 f"{int(gwc.in_lisa[i])}",

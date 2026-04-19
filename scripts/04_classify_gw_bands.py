@@ -139,10 +139,16 @@ def main() -> int:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     print(f"\nWriting CSV to {output_path} ...")
 
+    # Expose both source- and observer-frame f_ISCO explicitly so downstream
+    # CSV consumers can reproduce the band assignment.  `band` is computed
+    # from f_isco_observer_hz = f_isco_source_hz / (1 + z).  The legacy
+    # `f_isco_hz` column is retained as an alias of the source-frame value
+    # for backward compatibility with earlier runs.
     header = (
         "m1_msun,m2_msun,scale_factor,redshift,chirp_mass_msun,"
         "total_mass_msun,mass_ratio_q,eta,passes_quality_cut,"
-        "f_isco_hz,band,in_pta,in_lisa,in_gap"
+        "f_isco_hz,f_isco_source_hz,f_isco_observer_hz,"
+        "band,in_pta,in_lisa,in_gap"
     )
     rows_numeric = np.column_stack(
         [
@@ -155,7 +161,9 @@ def main() -> int:
             pop.mass_ratio_q,
             pop.eta,
             pop.passes_quality_cut.astype(np.int32),
-            gwc.f_isco_hz,
+            gwc.f_isco_hz,               # source-frame (backward-compat alias)
+            gwc.f_isco_source_hz,
+            gwc.f_isco_observer_hz,
             # band string column appended via object-array concat below
             gwc.in_pta.astype(np.int32),
             gwc.in_lisa.astype(np.int32),
@@ -166,18 +174,18 @@ def main() -> int:
     fmt_numeric_per_col = [
         "%.6e", "%.6e", "%.8f", "%.8f",
         "%.6e", "%.6e", "%.8f", "%.8f",
-        "%d", "%.6e",
+        "%d", "%.6e", "%.6e", "%.6e",
         "%d", "%d", "%d",
     ]
     with output_path.open("w", encoding="utf-8") as fh:
         fh.write(header + "\n")
         for i in range(catalog.n_mergers):
             numeric_cols = rows_numeric[i].tolist()
-            pre = numeric_cols[:10]  # up to and including f_isco_hz
-            post = numeric_cols[10:]  # in_pta, in_lisa, in_gap
-            parts = [fmt_numeric_per_col[j] % pre[j] for j in range(10)]
+            pre = numeric_cols[:12]  # up through f_isco_observer_hz
+            post = numeric_cols[12:]  # in_pta, in_lisa, in_gap
+            parts = [fmt_numeric_per_col[j] % pre[j] for j in range(12)]
             parts.append(str(gwc.band[i]))
-            parts += [fmt_numeric_per_col[10 + j] % post[j] for j in range(3)]
+            parts += [fmt_numeric_per_col[12 + j] % post[j] for j in range(3)]
             fh.write(",".join(parts) + "\n")
 
     # Summary.

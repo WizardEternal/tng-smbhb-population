@@ -153,8 +153,10 @@ Documentation:
 
 - **Gate 2 (multi-messenger gap plot):** renders cleanly on the seed=42
   synthetic catalog (5000 mergers). Funnel collapse:
-  `5000 → 4085 (quality) → 1593 LISA → 9 (Stripe 82 window) →
+  `5000 → 4085 (quality) → 1377 LISA → 9 (Stripe 82 window) →
   4.1 (sinusoidal-recoverable) → 0.8 (sawtooth-recoverable)`.
+  (Pre-observer-frame-correction runs reported 1593 LISA; see the
+  "Fixed" section below for why that dropped to 1377.)
   The dramatic multi-order-of-magnitude drop from raw mergers to
   sawtooth-recoverable is the intended visual punchline of the portfolio.
   Regeneration: `PYTHONPATH=src python scripts/06_generate_plots.py --synthetic`.

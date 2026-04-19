@@ -409,7 +409,7 @@ def integrate_inspiral(
 
       .. math::
 
-          v/c = \\left(\\frac{\\pi G M_{\\rm tot} f_{\\rm GW}}{2 c^3}\\right)^{1/3}
+          v/c = \\left(\\frac{\\pi G M_{\\rm tot} f_{\\rm GW}}{c^3}\\right)^{1/3}
 
     References
     ----------
@@ -546,10 +546,12 @@ def integrate_inspiral(
     ) ** (1.0 / 3.0)
 
     # Dimensionless orbital velocity:
-    #   v/c = (pi G M_tot f_GW / (2 c^3))^(1/3)
-    # (equivalent to v/c = 2*pi*f_orb*a / c but avoids the separation)
+    #   v_orb = 2*pi*f_orb*a, with Kepler a^3 = G M_tot / (4 pi^2 f_orb^2)
+    #   => v_orb^3 = 2 pi G M_tot f_orb = pi G M_tot f_GW   (f_orb = f_GW/2)
+    #   => v/c = (pi G M_tot f_GW / c^3)^(1/3)
+    # At f_ISCO this correctly gives v/c = 1/sqrt(6) ~ 0.408.
     v_over_c_arr: npt.NDArray[np.float64] = (
-        math.pi * G * m_tot_kg * f_gw_arr / (2.0 * c ** 3)
+        math.pi * G * m_tot_kg * f_gw_arr / (c ** 3)
     ) ** (1.0 / 3.0)
 
     # ------------------------------------------------------------------

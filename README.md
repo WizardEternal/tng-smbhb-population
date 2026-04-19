@@ -48,7 +48,7 @@ Worth reading before trusting any number in the results table.
 
 **Lin+2026 recovery fractions are population-averaged.** The 45% (sinusoidal) and 9% (sawtooth) numbers from Lin, Charisi and Haiman 2026 ([ApJ 997, 316](https://doi.org/10.3847/1538-4357/ae29a7)) are aggregate rates over a PTF-like survey population. Per-system rates depend on DRW noise parameters, signal amplitude, cadence, and period. Applying these fractions to individual TNG systems is an approximation.
 
-**Synthetic vs real data.** The canonical gap plot and headline funnel numbers come from synthetic seed=42 data (5,000 mergers, log-uniform M_tot in [2e5, 2e10] M_sun, q in [0.1, 1]). The real TNG100-1 run (18,374 mergers) was corrected in Phase 2b: `bh_details.py` reads `blackhole_details.hdf5` (5.48 GB) and recovers the true primary BH mass for 100% of mergers, replacing the broken `mass_out` equal-mass proxy. Post-correction q distribution has median 0.113, 5/95 pct = 0.001/0.920, and M_tot range 2.36e6 to 1.24e10 M_sun. The real-data Stripe 82 = 0 result is a structural TNG100-1 mass-ceiling finding, not a bug: the heaviest system in the box (1.24e10 M_sun) gives P_orb_obs ~65 days at ISCO and z~0, below the 200-day Stripe 82 floor. The window requires M_tot >= 3.8e10 M_sun, which TNG100-1's (106.5 cMpc)^3 volume simply doesn't contain. For ultra-massive systems, use TNG300-1, or evaluate P_obs during hardening/inspiral rather than at ISCO.
+**Synthetic vs real data.** The canonical gap plot and headline funnel numbers come from synthetic seed=42 data (5,000 mergers, log-uniform M_tot in ~[1.1e5, 2e10] M_sun, q in [0.1, 1]). The real TNG100-1 run (18,374 mergers) was corrected in Phase 2b: `bh_details.py` reads `blackhole_details.hdf5` (5.48 GB) and recovers the true primary BH mass for 100% of mergers, replacing the broken `mass_out` equal-mass proxy. Post-correction q distribution has median 0.113, 5/95 pct = 0.001/0.920, and M_tot range 2.36e6 to 1.24e10 M_sun. The real-data Stripe 82 = 0 result is a structural TNG100-1 mass-ceiling finding, not a bug: the heaviest system in the box (1.24e10 M_sun) gives P_orb_obs ~65 days at ISCO and z~0, below the 200-day Stripe 82 floor. The window requires M_tot >= 3.8e10 M_sun, which TNG100-1's (106.5 cMpc)^3 volume simply doesn't contain. For ultra-massive systems, use TNG300-1, or evaluate P_obs during hardening/inspiral rather than at ISCO.
 
 ## Why I built this
 
@@ -118,12 +118,12 @@ Synthetic is the main run. The real-data column is there to show the pipeline wo
 | Quality cut (M_tot > 1.2e6 M_sun) | 4,085 (81.7%) | 18,374 (100%) |
 | PTA-band f_ISCO (observer frame) | 1 (0.0%) | 0 (0.0%) |
 | LISA-band f_ISCO (observer frame) | 1,377 (33.7%) | 5,885 (32.0%) |
-| Gap-band f_ISCO (observer frame) | 2,698 (66.0%) | 12,489 (68.0%) |
+| Gap-band f_ISCO (observer frame) | 2,707 (66.3%) | 12,489 (68.0%) |
 | Stripe 82 window (200-1100 d) | 9 (0.22% of quality) | 0 (0%) |
 | Sinusoidal-recoverable (x0.45) | ~4.1 | 0 |
 | Sawtooth-recoverable (x0.09) | ~0.8 | 0 |
 
-*Synthetic figures use seed=42, 5,000 mergers, log-uniform M_tot in [2e5, 2e10] M_sun, q in [0.1, 1]. Real-data figures use TNG100-1 `blackhole_mergers.hdf5` plus `blackhole_details.hdf5` with true primary masses recovered by `bh_details.py` (Phase 2b; q median 0.113). GW band counts use observer-frame f_ISCO = f_ISCO_source / (1 + z). Regenerate: `PYTHONPATH=src python scripts/06_generate_plots.py [--synthetic]`.*
+*Synthetic figures use seed=42, 5,000 mergers, log-uniform M_tot in ~[1.1e5, 2e10] M_sun, q in [0.1, 1]. Real-data figures use TNG100-1 `blackhole_mergers.hdf5` plus `blackhole_details.hdf5` with true primary masses recovered by `bh_details.py` (Phase 2b; q median 0.113). GW band counts use observer-frame f_ISCO = f_ISCO_source / (1 + z). Regenerate: `PYTHONPATH=src python scripts/06_generate_plots.py [--synthetic]`.*
 
 The real-data Stripe 82 = 0 is structural: TNG100-1's heaviest merger is 1.24e10 M_sun, which gives P_orb_obs ~65 days at ISCO and z~0. That's below the 200-day Stripe 82 floor. Hitting the window requires M_tot >= 3.8e10 M_sun, and TNG100-1's box volume doesn't produce systems that massive. Synthetic data does produce Stripe 82 hits because the log-uniform M_tot upper bound of 2e10 M_sun is marginally above the structural threshold.
 

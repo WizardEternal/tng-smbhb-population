@@ -151,20 +151,22 @@ def test_survey_window_boundaries_stripe82():
 # ---------------------------------------------------------------------------
 
 def test_very_massive_bhs_sparse_stripe82():
-    """Systems with f_ISCO in the PTA band (very massive BHs) have large P_obs.
+    """Ultra-massive BHs have f_ISCO so low that P_obs exceeds the Stripe 82
+    cadence ceiling, so all such systems must classify as outside the survey.
 
-    Very massive BHs (e.g. 1e11 M_sun) have f_ISCO so low that P_obs >> 1100 days,
-    so in_stripe82 should be False for all of them (or at most a tiny fraction
-    if redshift happens to compress P_obs into window — not possible for z>=0).
-    For a system at z=0 with M_tot=1e11 M_sun:
-        f_ISCO ~ 2e-8 Hz  →  P_rest_s = 2/f_ISCO ~ 1e8 s ~ 1157 days
-    That is just above 1100 days, so it falls outside Stripe 82.
+    Use M_tot = 2.5e11 M_sun at z=0:
+        f_ISCO = c^3 / (6^1.5 π G M_tot) ≈ 1.76e-8 Hz
+        P_rest = 2 / f_ISCO / 86400 ≈ 1315 days
+    which is above the Stripe 82 ceiling of 1100 days for every system.  The
+    test asserts (unconditionally) that the classifier returns zero Stripe 82
+    detections in this regime, rather than trivially passing via an `if`
+    branch that never triggers.
     """
     import math
     from tng_smbhb._vendored_constants import G, c, M_SUN
 
     n = 10
-    m_total = 1e11  # M_sun — very massive, PTA-band
+    m_total = 2.5e11  # M_sun — chosen so P_rest > 1100 d at z=0
     m1_arr = np.full(n, m_total * 0.6)
     m2_arr = np.full(n, m_total * 0.4)
     # z=0 (a=1): P_obs = P_rest — largest possible periods
@@ -185,15 +187,15 @@ def test_very_massive_bhs_sparse_stripe82():
 
     result = classify_em_detectability(pop, f_isco_arr)
 
-    # For z=0, P_obs = 2/f_isco / 86400 days. For 1e11 M_sun this should
-    # exceed 1100 days, meaning no systems in Stripe 82.
-    p_obs = result.p_orb_isco_obs_days[0]
-    # Stripe 82 max is 1100 days — assert our logic is consistent
-    if p_obs > SURVEY_WINDOWS["stripe82"]["P_max_days"]:
-        assert result.n_stripe82_window == 0
-    else:
-        # Even if a massive BH happens to fall in window, count must be >= 0
-        assert result.n_stripe82_window >= 0
+    # Premise of the test: all systems must have P_obs above the Stripe 82
+    # ceiling.  If this ever fails (e.g. constants revised), the test is
+    # no longer checking what it claims and should be rewritten.
+    p_obs_max = float(np.max(result.p_orb_isco_obs_days))
+    assert p_obs_max > SURVEY_WINDOWS["stripe82"]["P_max_days"], (
+        f"Test setup no longer exceeds Stripe 82 ceiling "
+        f"(max P_obs = {p_obs_max:.1f} d)"
+    )
 
-    # In all cases, sum of in_stripe82 must be consistent with per-system flags
-    assert int(np.sum(result.in_stripe82)) == result.n_stripe82_window
+    # With the premise established, Stripe 82 count must be exactly zero.
+    assert result.n_stripe82_window == 0
+    assert int(np.sum(result.in_stripe82)) == 0
